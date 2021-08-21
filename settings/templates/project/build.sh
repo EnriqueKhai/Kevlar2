@@ -75,7 +75,7 @@ with just four lines of code (per language).
 
 # Locate test harness.
 fname="test_harness"
-f_ext=
+f_ext=".na"
 
     # Determine file extension.
     for ext in "${file_ext[@]}"; do
@@ -84,7 +84,7 @@ f_ext=
 
 file="$fname$f_ext"
 
-[ -f "$file" ] && {
+[ -f "$file" ] || {
     printf "No test harness detected.\n"
     clean_up 1
 }
