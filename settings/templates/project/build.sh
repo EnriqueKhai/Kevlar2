@@ -1,14 +1,19 @@
 #!/usr/bin/env zsh
 clear
 
+file_overview_for='>> [build.sh]
+
+...
+'
+
 
 # Paths & Functions.
 settings="../../settings"
 
-function set_up() {
-    log="log.txt"
-    tfile="temp.txt"
+log="log.txt"
+tfile="temp.txt"
 
+function set_up() {
     touch "$log"
     touch "$tfile"
 }
@@ -17,7 +22,7 @@ function clean_up() {
     rm "$log"
     rm "$tfile"
 
-    printf "\nPress ENTER to continue... "; read user_input
+    printf "\nPress ENTER to continue... "; read _
     exit $1
 }
 
@@ -27,86 +32,51 @@ set_up
 
 
 # Import supported languages.
-source "$settings/library/languages.sh"
-
-: '
-This section of text functions as a comment and is
-used to document the effects of sourcing languages.sh
-above.
-
-Supported programming languages and their metadata
-are defined in another script called languages.sh.
-This script is located in kevlar2/settings/library/.
-By sourcing it, developers can gain access to said
-metadata.
-
-Specifically, the following arrays are imported:
-
-    declare -a language   -- supported languages, i.e.
-                               - language[0]="C++"
-                               - language[1]="Java"
-                               - language[2]="Python3"
-                               - ( ... )
-
-    declare -A file_ext   -- corresponding file extensions, i.e.
-                               - file_ext["C++"]=".cpp"
-                               - file_ext["Java"]=".java"
-                               - file_ext["Python3"]=".py"
-                               - ( ... )
-
-    declare -A compile    -- compilation methods, i.e.
-                               - compile[".cpp"]="g++ FILENAME.cpp ..."
-                               - compile[".java"]="javac FILENAME.java"
-                               - compile[".py"]=""
-                               - ( ... )
-
-    declare -A execute    -- execution methods, i.e.
-                               - execute[".cpp"]="./FILENAME.exe"
-                               - execute[".java"]="java FILENAME"
-                               - execute[".py"]="python3 FILENAME.py"
-                               - ( ... )
-
-By default, only C++, Java and Python3 are supported.
-That said, Kevlar2 was designed with extensibility in
-mind; users can easily add new programming languages
-with just four lines of code (per language).
-'
+source '../../settings/libraries/languages.sh'
 
 
 # Locate test harness.
-fname="test_harness"
+fname='test_harness'
 f_ext=".na"
 
-    # Determine file extension.
-    for ext in "${file_ext[@]}"; do
-        [ -f "$fname$ext" ] && f_ext="$ext"
-    done
+
+# Determine file extension.
+for ext in "${file_ext[@]}"
+do
+    [ -f "$fname$ext" ] && \
+    {
+        f_ext="$ext"
+    }
+done
 
 file="$fname$f_ext"
 
-[ -f "$file" ] || {
+[ -f "$file" ] || \
+{
     printf "No test harness detected.\n"
     clean_up 1
 }
 
 
-# Compile, if needed.
+# Update template compile command.
 cmd="${compile[$f_ext]}"
 cmd="${cmd//FILENAME/$fname}"
 
-    # If $cmd is defined for $f_ext,  x-------------------------------+
-    [ -n "$cmd" ] && {                                        #       |
-        printf "Compiling $file..."                           #       |
-                                                              #       |
-        # compile $file.  <<------------------------------------------+
-        { ( $cmd ); } &> /dev/null; exit_code=$?
 
-        [ $exit_code -eq 0 ] && printf " done!   \n\n"
-        [ $exit_code -ne 0 ] && printf " failed. \n\n"
+# If $cmd is defined for $f_ext,
+[ -n "$cmd" ] && \
+{
+    printf "Compiling $file..."
 
-        # If compilation failed, recompile to print errors.
-        [ $exit_code -ne 0 ] && { ( $cmd ); clean_up 1; }
-    }
+    # compile $file
+    { eval "$cmd"; } &> /dev/null; exit_code=$?
+
+    [ $exit_code -eq 0 ] && printf " done!   \n\n"
+    [ $exit_code -ne 0 ] && printf " failed. \n\n"
+
+    # If compilation failed, recompile to print errors.
+    [ $exit_code -ne 0 ] && { eval "$cmd"; clean_up 1; }
+}
 
 
 # Execute all tests.
@@ -116,8 +86,9 @@ cmd="${cmd//FILENAME/$fname}"
 tested=0; ignored=0 passed=0 failed=0
 
 printf "Test Suites\n"
-for test_suite in test_suites/*; do
 
+for test_suite in test_suites/*
+do
     # If test_suite is not a directory, ignore it.
     [ -d "$test_suite" ] || continue
 
@@ -145,14 +116,14 @@ for test_suite in test_suites/*; do
     # If test suite is empty, ignore it.
     [ -s "$tfile" ] || { exit_code=0; verdict="--"; remarks="No Input"; (( ++ignored )); }
 
-    # If test suite is non-empty,   x--------------------------------+
-    [ -s "$tfile" ] && {                                #            |
-                                                        #            |
-        # Run test suite.   <<---------------------------------------+
+    # If test suite is non-empty,
+    [ -s "$tfile" ] && \
+    {
+        # run it.
         { ( $cmd < "$tfile" > "$rfile" ); } &> /dev/null; exit_code=$?
 
-        [ $exit_code -eq 0 ] && {
-
+        [ $exit_code -eq 0 ] && \
+        {
             # Compare results generated with the output expected.
             f_diff="$(
                 diff                                                 \
@@ -185,16 +156,15 @@ for test_suite in test_suites/*; do
     [ $exit_code -eq 0 ] && printf "${color_}     ${_color}\n"
     [ $exit_code -ne 0 ] && printf "${color_}(%3d)${_color}\n" $exit_code
 
-done
-
-printf "\n"
+done; printf "\n"
 
 
 # Evaluate test results.
 printf "Results                 \n"
 printf "  %-7s %-3d             \n" "Total"   $tested
 
-[ $tested -gt 0 ] && {
+[ $tested -gt 0 ] && \
+{
     printf "  %-7s %-3d (%3d%%) \n" "Passed"  $passed  $(( 100 * passed  / tested ))
     printf "  %-7s %-3d (%3d%%) \n" "Failed"  $failed  $(( 100 * failed  / tested ))
     printf "  %-7s %-3d (%3d%%) \n" "Ignored" $ignored $(( 100 * ignored / tested ))
