@@ -3,15 +3,20 @@ clear
 
 file_overview_for='>> [build.sh]
 
-...
+----------------------------------------------------
 '
 
 
-# Paths & Functions.
-settings="../../settings"
-
+# Local file names for tidiness.
 log="log.txt"
 tfile="temp.txt"
+
+
+# Helper functions for tidiness.
+function finish() {
+    printf "\nPress ENTER to continue... "; read _
+    exit $1
+}
 
 function set_up() {
     touch "$log"
@@ -22,8 +27,7 @@ function clean_up() {
     rm "$log"
     rm "$tfile"
 
-    printf "\nPress ENTER to continue... "; read _
-    exit $1
+    finish $1
 }
 
 
@@ -37,7 +41,7 @@ source '../../settings/libraries/languages.sh'
 
 # Locate test harness.
 fname='test_harness'
-f_ext=".na"
+f_ext='--'
 
 
 # Determine file extension.

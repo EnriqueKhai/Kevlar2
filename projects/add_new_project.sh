@@ -89,3 +89,4 @@ printf "> Creating test harness for $project_name..."
 
 # End script.
 printf '\nPress ENTER to continue...'; read _
+
