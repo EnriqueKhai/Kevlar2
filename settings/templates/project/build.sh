@@ -120,6 +120,8 @@ cmd="${cmd//FILENAME/$fname}"
 
 
 # Execute all tests.
+source '../../settings/config/limits.sh'
+
 tested=0; ignored=0 passed=0 failed=0
 
 printf 'Test Suites\n'
@@ -172,7 +174,10 @@ do
     [ -s "$tfile" ] && \
     {
         # run it.
-        { eval "$cmd < "$tfile" > "$rfile""; } &> /dev/null; exit_code=$?
+        {
+            eval "timeout $MAX_TEST_TIME_IN_SECONDS $cmd < "$tfile" > "$rfile"";
+
+        } &> /dev/null; exit_code=$?
 
         [ $exit_code -eq 0 ] && \
         {
@@ -210,8 +215,16 @@ do
     printf "${color_}%-9s %-14s${_color}" "$verdict" "$remarks"
 
     # Print exit code for runtime errors.
-    [ $exit_code -eq 0 ] && printf "${color_}     ${_color}\n"
-    [ $exit_code -ne 0 ] && printf "${color_}(%3d)${_color}\n" $exit_code
+    [ $exit_code -eq 0 ] && \
+    {
+        printf '\n'
+    }
+
+    [ $exit_code -ne 0 ] && \
+    {
+        [ $exit_code -eq 124 ] && printf "${color_} (%s)${_color}\n" ">${MAX_TEST_TIME_IN_SECONDS}s"
+        [ $exit_code -ne 124 ] && printf "${color_}(%3d)${_color}\n" $exit_code
+    }
 
 done; printf "\n"
 
