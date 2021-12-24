@@ -3,7 +3,29 @@ clear
 
 file_overview_for='>> [build.sh]
 
-----------------------------------------------------
+This script compiles (if applicable) the test harness
+and executes each test suite defined, one at a time.
+
+Several outcomes are possible for each test:
+
+    1. Ok.
+    2. Failed, Runtime Error.
+    3. Failed, Time Limit Exceeded.
+    4. Failed, Output Limit Exceeded.
+    5. --, No Input.
+
+
+The algorithm:
+
+For each test suite defined, Kevlar2 redirects all
+inputs to the test harness.
+
+Then, it checks to see if the output generated is
+equal to the output expected (user defined).
+
+Here, equality is determined via the `diff` command.
+Importantly, blank lines and trailing white spaces are
+ignored.
 '
 
 
