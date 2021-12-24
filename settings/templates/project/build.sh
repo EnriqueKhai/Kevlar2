@@ -9,10 +9,11 @@ and executes each test suite defined, one at a time.
 Several outcomes are possible for each test:
 
     1. Ok.
-    2. Failed, Runtime Error.
-    3. Failed, Time Limit Exceeded.
-    4. Failed, Output Limit Exceeded.
-    5. --, No Input.
+    2. Failed, Wrong Output.
+    3. Failed, Runtime Error.
+    4. Failed, Time Limit Exceeded.
+    5. Failed, Output Limit Exceeded.
+    6. --, No Input.
 
 
 The algorithm:
@@ -20,23 +21,23 @@ The algorithm:
 For each test suite defined, Kevlar2 redirects all
 inputs to the test harness.
 
-Then, it checks to see if the output generated is
+Then, it checks to see if the results generated are
 equal to the output expected (user defined).
 
 Here, equality is determined via the `diff` command.
-Importantly, blank lines and trailing white spaces are
-ignored.
+Importantly, blank lines and trailing white spaces
+are ignored.
 '
 
 
-# Local file names for tidiness.
-log="log.txt"
-tfile="temp.txt"
+# Local filenames for tidiness.
+log='log.txt'
+tfile='temp.txt'
 
 
 # Helper functions for tidiness.
 function finish() {
-    printf "\nPress ENTER to continue... "; read _
+    printf '\nPress ENTER to continue... '; read _
     exit $1
 }
 
@@ -75,26 +76,31 @@ do
     }
 done
 
-file="$fname$f_ext"
 
-[ -f "$file" ] || \
+# In case none of the supported extensions match.
+test_harness="$fname$f_ext"
+
+[ -f "$test_harness" ] || \
 {
-    printf "No test harness detected.\n"
+    printf 'No test harness detected.\n'
     clean_up 1
 }
 
 
-# Update template compile command.
+# Get compile command for $f_ext files.
 cmd="${compile[$f_ext]}"
+
+
+# Replace 'FILENAME' in $cmd with the actual filename.
 cmd="${cmd//FILENAME/$fname}"
 
 
 # If $cmd is defined for $f_ext,
 [ -n "$cmd" ] && \
 {
-    printf "Compiling $file..."
+    printf "Compiling $test_harness..."
 
-    # compile $file
+    # compile $test_harness.
     { eval "$cmd"; } &> /dev/null; exit_code=$?
 
     [ $exit_code -eq 0 ] && printf " done!   \n\n"
@@ -105,13 +111,18 @@ cmd="${cmd//FILENAME/$fname}"
 }
 
 
-# Execute all tests.
+# Get execute command for $f_ext files.
 cmd="${execute[$f_ext]}"
+
+
+# Replace 'FILENAME' in $cmd with actual filename.
 cmd="${cmd//FILENAME/$fname}"
 
+
+# Execute all tests.
 tested=0; ignored=0 passed=0 failed=0
 
-printf "Test Suites\n"
+printf 'Test Suites\n'
 
 for test_suite in test_suites/*
 do
@@ -120,33 +131,48 @@ do
 
     (( ++tested ))
 
-    printf "  %-23s" "$(basename "$test_suite")"
+    printf '  %-23s' "$(basename "$test_suite")"
 
+    # Test inputs.
     ifile="$test_suite/input.txt"
+
+    # Output expected.
     ofile="$test_suite/output.txt"
+
+    # Results generated.
     rfile="$test_suite/result.txt"
 
-    # Remove comments from input.txt.
-    sed                                                 \
-        -e '/^[ \t]*#/d'                                \
-        -e 's/[ \t]*#.*$//g'                            \
+    # Remove comments from input.txt, unless otherwise specified.
+    flag="$1"
+
+    [ "$flag" = '--no-parse' ] && \
+    {
+        cp "$ifile" "$tfile"
+    }
+
+    [ "$flag" = '--no-parse' ] || \
+    {
+        sed                                             \
+            -e '/^[ \t]*#/d'                            \
+            -e 's/[ \t]*#.*$//g'                        \
                                                         \
-    < "$ifile"                                          \
-    > "$tfile"
+        < "$ifile"                                      \
+        > "$tfile"
+    }
 
     # Test results.
-    verdict=""
-    remarks=""
+    verdict=''
+    remarks=''
     exit_code=0
 
     # If test suite is empty, ignore it.
-    [ -s "$tfile" ] || { exit_code=0; verdict="--"; remarks="No Input"; (( ++ignored )); }
+    [ -s "$tfile" ] || { exit_code=0; verdict='--'; remarks='No Input'; (( ++ignored )); }
 
     # If test suite is non-empty,
     [ -s "$tfile" ] && \
     {
         # run it.
-        { ( $cmd < "$tfile" > "$rfile" ); } &> /dev/null; exit_code=$?
+        { eval "$cmd < "$tfile" > "$rfile""; } &> /dev/null; exit_code=$?
 
         [ $exit_code -eq 0 ] && \
         {
@@ -166,12 +192,17 @@ do
 
         [ $exit_code -ne 0 ] && { verdict="Failed."; remarks="Runtime Error"; (( ++failed )); }
 
+        # Specific failure mode (1): Time Limit Exceeded.
+        [ $exit_code -eq 124 ] && remarks="Time Limit Exceeded"
+
+        # Specific failure mode (2): Output Limit Exceeded.
+
     }
 
     case "$verdict" in
         "Ok."     ) color_='\033[1;32m' _color='\033[0m' ;;   # Green
         "Failed." ) color_='\033[1;31m' _color='\033[0m' ;;   # Red
-        "--"      ) color_='\033[1;33m' _color='\033[0m' ;;   # Yellow
+        "  "      ) color_='\033[1;33m' _color='\033[0m' ;;   # Yellow
         *         ) color_='\033[0m'    _color='\033[0m' ;;
     esac
 
@@ -186,14 +217,14 @@ done; printf "\n"
 
 
 # Evaluate test results.
-printf "Results                 \n"
-printf "  %-7s %-3d             \n" "Total"   $tested
+printf 'Results                 \n'
+printf '  %-7s %-3d             \n' 'Total'   $tested
 
 [ $tested -gt 0 ] && \
 {
-    printf "  %-7s %-3d (%3d%%) \n" "Passed"  $passed  $(( 100 * passed  / tested ))
-    printf "  %-7s %-3d (%3d%%) \n" "Failed"  $failed  $(( 100 * failed  / tested ))
-    printf "  %-7s %-3d (%3d%%) \n" "Ignored" $ignored $(( 100 * ignored / tested ))
+    printf '  %-7s %-3d (%3d%%) \n' 'Passed'  $passed  $(( 100 * passed  / tested ))
+    printf '  %-7s %-3d (%3d%%) \n' 'Failed'  $failed  $(( 100 * failed  / tested ))
+    printf '  %-7s %-3d (%3d%%) \n' 'Ignored' $ignored $(( 100 * ignored / tested ))
 }
 
 
