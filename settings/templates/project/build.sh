@@ -54,6 +54,11 @@ function clean_up() {
 }
 
 
+# Options.
+set -o nounset
+set -o pipefail
+
+
 # Script start.
 set_up
 
@@ -122,6 +127,9 @@ cmd="${cmd//FILENAME/$fname}"
 # Execute all tests.
 source '../../settings/config/limits.sh'
 
+OUTPUT_LIMIT=$MAX_FILE_SIZE_IN_BYTES
+RUNTIME_LIMIT=$MAX_TEST_TIME_IN_SECONDS
+
 tested=0; ignored=0 passed=0 failed=0
 
 printf 'Test Suites\n'
@@ -145,7 +153,7 @@ do
     rfile="$test_suite/result.txt"
 
     # Remove comments from input.txt, unless otherwise specified.
-    flag="$1"
+    flag="${1:-none}"
 
     [ "$flag" = '--no-parse' ] && \
     {
@@ -175,8 +183,11 @@ do
     {
         # run it.
         {
-            eval "timeout $MAX_TEST_TIME_IN_SECONDS $cmd < "$tfile" > "$rfile"";
+            tm_cmd="$cmd < "$tfile" | head --bytes=$OUTPUT_LIMIT > "$rfile""
 
+            eval "
+                timeout --foreground $RUNTIME_LIMIT $tm_cmd
+            ";
         } &> /dev/null; exit_code=$?
 
         [ $exit_code -eq 0 ] && \
@@ -215,16 +226,12 @@ do
     printf "${color_}%-9s %-14s${_color}" "$verdict" "$remarks"
 
     # Print exit code for runtime errors.
-    [ $exit_code -eq 0 ] && \
-    {
-        printf '\n'
-    }
-
-    [ $exit_code -ne 0 ] && \
-    {
-        [ $exit_code -eq 124 ] && printf "${color_} (%s)${_color}\n" ">${MAX_TEST_TIME_IN_SECONDS}s"
-        [ $exit_code -ne 124 ] && printf "${color_}(%3d)${_color}\n" $exit_code
-    }
+    case $exit_code in
+        0   ) printf '\n'                                           ;;
+        124 ) printf "${color_}> %ds${_color}\n" "${RUNTIME_LIMIT}" ;;
+        256 ) printf "${color_}> %dB${_color}\n" "${OUTPUT_LIMIT}"  ;;
+        *   ) printf "${color_}(%3d)${_color}\n" $exit_code         ;;
+    esac
 
 done; printf "\n"
 
