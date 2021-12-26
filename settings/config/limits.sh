@@ -14,9 +14,10 @@ size for each test, in cases of infinite loops and
 unfettered printing to standard output.
 '
 
-# Runtime limit (in secs) for each test.
-MAX_TEST_TIME_IN_SECONDS=5
+
+# Runtime limit for each test. Units = s, m or h.
+MAX_TEST_DURATION='5s'
 
 
-# File size limit (in bytes) for output.txt.
-MAX_FILE_SIZE_IN_BYTES=10
+# File size limit for output.txt. Units = B, kB or MB.
+MAX_OUTPUT_SIZE='10kB'
