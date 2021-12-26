@@ -12,8 +12,8 @@ automate black-box and regression testing workflows.
       - [Time Limit Exceeded](#time-limit-exceeded)
       - [Output Limit Exceeded](#output-limit-exceeded)
   - [Adding a new Language](#adding-a-new-language)
-    - [Define it](#define-it)
-    - [Add a Template](#add-a-template)
+    - [Step 1: Define it](#step-1-define-it)
+    - [Step 2: Add a Template](#step-2-add-a-template)
   - [Comments](#comments)
 
 # Overview
@@ -127,3 +127,5 @@ If present, this template test harness will be be copied
 over whenever we create a new project using this language.
 
 # Comments
+
+...
