@@ -54,12 +54,21 @@ function clean_up() {
 }
 
 
+# Options.
+set -o nounset
+set -o pipefail
+
+
 # Script start.
 set_up
 
 
 # Import supported languages.
 source '../../settings/libraries/languages.sh'
+
+
+# Import utilities.
+source '../../settings/libraries/utilities.sh'
 
 
 # Locate test harness.
@@ -103,8 +112,8 @@ cmd="${cmd//FILENAME/$fname}"
     # compile $test_harness.
     { eval "$cmd"; } &> /dev/null; exit_code=$?
 
-    [ $exit_code -eq 0 ] && printf " done!   \n\n"
-    [ $exit_code -ne 0 ] && printf " failed. \n\n"
+    [ $exit_code -eq 0 ] && printf ' done!   \n\n'
+    [ $exit_code -ne 0 ] && printf ' failed. \n\n'
 
     # If compilation failed, recompile to print errors.
     [ $exit_code -ne 0 ] && { eval "$cmd"; clean_up 1; }
@@ -121,6 +130,9 @@ cmd="${cmd//FILENAME/$fname}"
 
 # Execute all tests.
 source '../../settings/config/limits.sh'
+
+OUTPUT_LIMIT=$( parse_size $MAX_OUTPUT_SIZE )
+RUNTIME_LIMIT=$( parse_time $MAX_TEST_DURATION )
 
 tested=0; ignored=0 passed=0 failed=0
 
@@ -145,7 +157,7 @@ do
     rfile="$test_suite/result.txt"
 
     # Remove comments from input.txt, unless otherwise specified.
-    flag="$1"
+    flag="${1:-none}"
 
     [ "$flag" = '--no-parse' ] && \
     {
@@ -175,9 +187,15 @@ do
     {
         # run it.
         {
-            eval "timeout $MAX_TEST_TIME_IN_SECONDS $cmd < "$tfile" > "$rfile"";
+            tm_cmd="$cmd < "$tfile" | head --bytes=$(( $OUTPUT_LIMIT + 1)) > "$rfile""
 
+            eval "
+                timeout --foreground $RUNTIME_LIMIT $tm_cmd
+            ";
         } &> /dev/null; exit_code=$?
+
+        # Check if output limit was exceeded.
+        [ $(wc --bytes < "$rfile") -gt $OUTPUT_LIMIT ] && exit_code=141
 
         [ $exit_code -eq 0 ] && \
         {
@@ -188,45 +206,43 @@ do
                     --ignore-blank-lines                             \
                                                                      \
                 "$rfile"                                             \
-                "$ofile"
+                "$ofile" |                                           \
+                                                                     \
+                head --bytes=10
             )"
 
-            [ -z "$f_diff" ] && { verdict="Ok."    ; remarks=""             ; (( ++passed )); }
-            [ -n "$f_diff" ] && { verdict="Failed."; remarks="Wrong Output" ; (( ++failed )); }
+            [ -z "$f_diff" ] && { verdict='Ok.'    ; remarks=''             ; (( ++passed )); }
+            [ -n "$f_diff" ] && { verdict='Failed.'; remarks="Wrong Output" ; (( ++failed )); }
         }
 
-        [ $exit_code -ne 0 ] && { verdict="Failed."; remarks="Runtime Error"; (( ++failed )); }
+        [ $exit_code -ne 0 ] && { verdict='Failed.'; remarks='Runtime Error'; (( ++failed )); }
 
-        # Specific failure mode (1): Time Limit Exceeded.
-        [ $exit_code -eq 124 ] && remarks="Time Limit Exceeded"
+        # Failure Mode: Time Limit Exceeded.
+        [ $exit_code -eq 124 ] && remarks='Time Limit Exceeded'
 
-        # Specific failure mode (2): Output Limit Exceeded.
-
+        # Failure Mode: Output Limit Exceeded.
+        [ $exit_code -eq 141 ] && remarks='Output Limit Exceeded'
     }
 
     case "$verdict" in
-        "Ok."     ) color_='\033[1;32m' _color='\033[0m' ;;   # Green
-        "Failed." ) color_='\033[1;31m' _color='\033[0m' ;;   # Red
-        "  "      ) color_='\033[1;33m' _color='\033[0m' ;;   # Yellow
+        'Ok.'     ) color_='\033[1;32m' _color='\033[0m' ;;   # Green
+        'Failed.' ) color_='\033[1;31m' _color='\033[0m' ;;   # Red
+        '  '      ) color_='\033[1;33m' _color='\033[0m' ;;   # Yellow
         *         ) color_='\033[0m'    _color='\033[0m' ;;
     esac
 
     # Print test results.
-    printf "${color_}%-9s %-14s${_color}" "$verdict" "$remarks"
+    printf "${color_}%-9s %s ${_color}" "$verdict" "$remarks"
 
     # Print exit code for runtime errors.
-    [ $exit_code -eq 0 ] && \
-    {
-        printf '\n'
-    }
+    case $exit_code in
+        0   ) printf '\n'                                               ;;
+        124 ) printf "${color_}(%s) ${_color}\n" "${MAX_TEST_DURATION}" ;;
+        141 ) printf "${color_}(%s) ${_color}\n" "${MAX_OUTPUT_SIZE}"   ;;
+        *   ) printf "${color_}(%3d)${_color}\n"  $exit_code            ;;
+    esac
 
-    [ $exit_code -ne 0 ] && \
-    {
-        [ $exit_code -eq 124 ] && printf "${color_} (%s)${_color}\n" ">${MAX_TEST_TIME_IN_SECONDS}s"
-        [ $exit_code -ne 124 ] && printf "${color_}(%3d)${_color}\n" $exit_code
-    }
-
-done; printf "\n"
+done; printf '\n'
 
 
 # Evaluate test results.
