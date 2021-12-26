@@ -7,9 +7,14 @@ automate black-box and regression testing workflows.
 
   - [Overview](#overview)
   - [Installation](#installation)
+  - [Getting Started](#getting-started)
+    - [Errors](#errors)
+      - [Time Limit Exceeded](#time-limit-exceeded)
+      - [Output Limit Exceeded](#output-limit-exceeded)
   - [Adding a new Language](#adding-a-new-language)
     - [Define it](#define-it)
     - [Add a Template](#add-a-template)
+  - [Comments](#comments)
 
 # Overview
 
@@ -47,6 +52,22 @@ to install.
 git clone https://github.com/EnriqueKhai/Kevlar2.git
 ```
 
+# Getting Started
+
+...
+
+## Errors
+
+...
+
+### Time Limit Exceeded
+
+...
+
+### Output Limit Exceeded
+
+...
+
 # Adding a New Language
 
 Out of the box, Kevlar2 supports C++, Java and Python3.
@@ -54,7 +75,7 @@ Out of the box, Kevlar2 supports C++, Java and Python3.
 That said, the magic of it is that *any* language can be
 added with just four lines of code.
 
-## Define it
+## Step 1: Define it
 
 Simply define four pieces of information for this new
 language in `settings/libraries/languages.sh`:
@@ -66,7 +87,7 @@ language in `settings/libraries/languages.sh`:
 
 As an example, here is how we would add TypeScript:
 
-```Shell
+```Bash
 48    # Python3
 49    language+=(Python3)
 40    file_ext[Python3]='.py'
@@ -97,10 +118,12 @@ Here, the "FILENAME" string literal is just a token that
 will be dynamically replaced with the actual filename
 during runtime.
 
-## Add a Template
+## Step 2: Add a Template
 
 For completeness, we can choose to create a template test
 harness for our new language.
 
 If present, this template test harness will be be copied
 over whenever we create a new project using this language.
+
+# Comments
