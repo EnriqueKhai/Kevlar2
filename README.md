@@ -1,7 +1,7 @@
 # Kevlar2
 
-Kevlar2 is a language-agnostic framework built to 
-automate black-box and regression testing workflows.
+Kevlar2 is a language-agnostic, shell-based framework
+built to automate regression testing workflows.
 
 # Table of Contents
 
@@ -18,16 +18,14 @@ automate black-box and regression testing workflows.
     - [Step 1: Define it](#step-1-define-it)
     - [Step 2: Add a Template](#step-2-add-a-template)
   - [Comments](#comments)
+  - [License & Copyright](#license-&-copyright)
 
 # Overview
 
 Before we begin, let's address the elephant in the room:
-why "Kevlar2"? The hope is that we can help you *bulletproof*
-your code by helping you automate regression tests!
-
-Also, Kevlar2 is the next iteration of the original [Kevlar](https://github.com/EnriqueKhai/Kevlar)
-project, a system I had developed for the purpose of
-Competitive Programming.
+why "Kevlar2"? We test code to make it robust, and it is
+my greatest hope that Kevlar2 can help you **bulletproof**
+yours!
 
 ## The Problem Today
 
@@ -45,16 +43,16 @@ testing framework from scratch?
 
 ## Universal Testing with Black-box(ing)
 
-Kevlar2 achieves language-agnosticism by leveraging the
-user's own shell (we support both `bash` and `zsh`) and
-an idea from [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing).
+Kevlar2 achieves language-agnostic testing by leveraging
+the user's native shell (we support both `bash` and `zsh`)
+and an idea from [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing).
 
-By coordinating file redirects, we can drive any piece
-of code with inputs and check its output at the other end,
+By coordinating file redirects, we can **test** any piece
+of code by driving it with inputs and checking its output,
 so long as the user's shell can compile and execute the
-source language.
+source language (almost always a given).
 
-That is why we say we can "add any language" because
+That is why we say we can "support any language" - because
 which *xyz* developer doesn't have *xyz* installed on
 his or her machine?
 
@@ -205,3 +203,11 @@ because the `#` character is used in tests, run the
 ```
 build.sh --no-parse
 ```
+
+# License & Copyright
+
+Copyright (c) 2021, Nigel Tan
+All rights reserved.
+
+This source code is licensed under the BSD-style license
+found [here](LICENSE).
