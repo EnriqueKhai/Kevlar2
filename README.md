@@ -73,8 +73,8 @@ git clone https://github.com/EnriqueKhai/Kevlar2.git
 
 Kevlar2 was designed with multiple safeguards to ensure
 that tests could finish gracefully when met with errors.
-These errors include runtime errors such as Time Limit
-Exceeded and Output Limit Exceeded.
+These errors include runtime errors such as
+*Time Limit Exceeded* and *Output Limit Exceeded*.
 
 ### Time Limit Exceeded
 
@@ -92,7 +92,7 @@ in `settings/config/limits.sh`.
 
 By default, the time limit is 5 seconds.
 
-Getting a Time Limit Exceeded error often means that the
+Getting a *Time Limit Exceeded* error often means that the
 program entered an infinite loop somewhere. Of course,
 users can also set specific time limits to ensure that
 their code meets certain performance benchmarks.
@@ -118,10 +118,11 @@ in `settings/config/limits.sh`.
 
 By default, the output limit is 10kB.
 
-Getting an Output Limit Error often means that the program
-entered an infinite loop somewhere and keeps printing to
-standard output. Implemented as a safeguard for program-OS
-write safety, it is advisable to keep the output limit small.
+Getting an *Output Limit Exceeded* error often means that
+the program entered an infinite loop somewhere and keeps
+printing to standard output. Implemented as a safeguard
+for program-OS write safety, it is advisable to keep the
+output limit small.
 
 # Adding a New Language
 
