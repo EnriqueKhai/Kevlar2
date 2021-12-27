@@ -18,7 +18,7 @@ built to automate regression testing workflows.
     - [Step 1: Define it](#step-1-define-it)
     - [Step 2: Add a Template](#step-2-add-a-template)
   - [Comments](#comments)
-  - [License & Copyright](#license--copyright)
+  - [License & Copyright](#license-and-copyright)
 
 # Overview
 
@@ -204,9 +204,9 @@ because the `#` character is used in tests, run the
 build.sh --no-parse
 ```
 
-# License & Copyright
+# License and Copyright
 
-Copyright (c) 2021, Nigel Tan
+Copyright (c) 2021, Nigel Tan.
 
 All rights reserved.
 
