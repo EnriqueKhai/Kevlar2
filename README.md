@@ -181,4 +181,27 @@ over whenever we create a new project using this language.
 
 # Comments
 
-...
+Kevlar2 supports shell-styled comments, or parts beginning
+with a `#` character, in all input files. Consider the
+following `input.txt` file:
+
+```
+# Number of test cases, n.      <-- This is a comment!
+5
+
+# Arguments: a, b               <-- This is also a comment!
+3 5
+6 1
+3 6
+7 6  # Note: edge case.         <-- This is also a comment!
+3 7
+```
+
+Comments serve as a way to document test inputs, and are
+ignored during testing. To disable comments, possibly
+because the `#` character is used in tests, run the
+`build.sh` script with the `--no-parse` flag:
+
+```
+build.sh --no-parse
+```
