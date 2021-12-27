@@ -18,30 +18,43 @@ automate black-box and regression testing workflows.
 
 # Overview
 
+Before we begin, let's address the elephant in the room:
+why "Kevlar2"? The hope is that we can help you *bulletproof*
+your code by helping you automate regressiont tests!
+
+Also, Kevlar2 is the next iteration of the original [Kevlar](https://github.com/EnriqueKhai/Kevlar)
+project, a system I had developed for the purpose of
+Competitive Programming.
+
+## The Problem Today
+
 Programming languages come and go: what is fashionable
-today might be extinct tomorrow.
+today might be extinct tomorrow. For that reason,
+developers often have to learn a number of languages
+over their careers (and a testing framework for each).
 
-For that reason, developers often have to learn a number
-of languages over their careers (and a testing framework
-for each).
+## One Tool to Rule Them All
 
-What if we had one tool to rule them all?
+What if we had one framework to test all code? A tool
+such that, no matter what new language we pick up
+tomorrow, we will not need to learn yet *another*
+testing framework from scratch?
 
-A tool such that, no matter what new language we pick up
-tomorrow, we will not need to learn yet *another* testing
-framework from scratch?
+## Universal Testing with Black-box(ing)
 
-Kevlar2 achieves this by leveraging an underlying shell
-(we support both `bash` and `zsh`) to compile and execute
-the code.
+Kevlar2 achieves language-agnosticism by leveraging an
+underlying shell (we support both `bash` and `zsh`) and
+an idea from [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing).
 
-This effectively means that any language supported by the
-user's shell is code Kevlar2 can test.
+By leveraging an underlying shell to coordinate file
+redirects, we can drive any piece of code with inputs
+and check its output at the other end: is it what we
+were expecting? Put another way, Kevlar2 can test any
+code that the user's own shell supports.
 
-That is why we can "add any language" because which *xyz*
-developer doesn't have *xyz* installed on his or her
-machine?
-
+That is why we say we can "add any language" because
+which *xyz* developer doesn't have *xyz* installed on
+his or her machine?
 
 # Installation
 
@@ -77,8 +90,7 @@ added with just four lines of code.
 
 ## Step 1: Define it
 
-Simply define four pieces of information for this new
-language in `settings/libraries/languages.sh`:
+Simply define four pieces of information in `settings/libraries/languages.sh`:
 
   1. Language name (in English)
   2. File extension
@@ -103,14 +115,11 @@ As an example, here is how we would add TypeScript:
 50  
 ```
 
-Here, we are telling Kevlar2 that our new language is
-called "TypeScript", and its files end with ".ts".
-
-We then specify that TypeScript files require compilation
-and can be compiled with the `tsc <FILENAME>.ts` command.
-
-Note that the above command creates a JavaScript file.
-
+First, we are tell Kevlar2 that our new language is
+called "TypeScript", and that its files end with ".ts".
+Next, we specify that TypeScript files require compilation
+by giving it a compile command: `tsc <FILENAME>.ts`.
+Note that this compile command creates a JavaScript file.
 Lastly, we tell Kevlar2 that our source file can be run
 using the `node <FILENAME>.js` command.
 
