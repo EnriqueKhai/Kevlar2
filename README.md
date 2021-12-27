@@ -18,7 +18,7 @@ built to automate regression testing workflows.
     - [Step 1: Define it](#step-1-define-it)
     - [Step 2: Add a Template](#step-2-add-a-template)
   - [Comments](#comments)
-  - [License & Copyright](#license-and-copyright)
+  - [License and Copyright](#license-and-copyright)
 
 # Overview
 
