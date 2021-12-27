@@ -38,22 +38,21 @@ over their careers (and one testing framework for each).
 
 ## One Tool to Rule Them All
 
-What if we had one framework to test all code? A tool
-such that, no matter what new language we pick up
-tomorrow, we will not need to learn yet *another*
+What if we had one framework that could test any code?
+A tool such that, no matter what new language we pick
+up tomorrow, we will not need to learn yet *another*
 testing framework from scratch?
 
 ## Universal Testing with Black-box(ing)
 
-Kevlar2 achieves language-agnosticism by leveraging an
-underlying shell (we support both `bash` and `zsh`) and
+Kevlar2 achieves language-agnosticism by leveraging the
+user's own shell (we support both `bash` and `zsh`) and
 an idea from [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing).
 
 By coordinating file redirects, we can drive any piece
-of code with inputs and check its output at the other end:
-is it what we were expecting? Then, Kevlar2 can test any
-language or code that the user's shell can compile (if
-applicable) and execute!
+of code with inputs and check its output at the other end,
+so long as the user's shell can compile and execute the
+source language.
 
 That is why we say we can "add any language" because
 which *xyz* developer doesn't have *xyz* installed on
