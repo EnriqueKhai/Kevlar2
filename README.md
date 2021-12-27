@@ -207,6 +207,7 @@ build.sh --no-parse
 # License & Copyright
 
 Copyright (c) 2021, Nigel Tan
+
 All rights reserved.
 
 This source code is licensed under the BSD-style license
