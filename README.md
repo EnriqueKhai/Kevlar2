@@ -6,6 +6,9 @@ automate black-box and regression testing workflows.
 # Table of Contents
 
   - [Overview](#overview)
+    - [The Problem Today](#the-problem-today)
+    - [One Tool to Rule Them All](#one-tool-to-rule-them-all)
+    - [Universal Testing with Black-box(ing)](#universal-testing-with-black-boxing)
   - [Installation](#installation)
   - [Getting Started](#getting-started)
     - [Errors](#errors)
@@ -20,7 +23,7 @@ automate black-box and regression testing workflows.
 
 Before we begin, let's address the elephant in the room:
 why "Kevlar2"? The hope is that we can help you *bulletproof*
-your code by helping you automate regressiont tests!
+your code by helping you automate regression tests!
 
 Also, Kevlar2 is the next iteration of the original [Kevlar](https://github.com/EnriqueKhai/Kevlar)
 project, a system I had developed for the purpose of
@@ -31,7 +34,7 @@ Competitive Programming.
 Programming languages come and go: what is fashionable
 today might be extinct tomorrow. For that reason,
 developers often have to learn a number of languages
-over their careers (and a testing framework for each).
+over their careers (and one testing framework for each).
 
 ## One Tool to Rule Them All
 
@@ -46,11 +49,11 @@ Kevlar2 achieves language-agnosticism by leveraging an
 underlying shell (we support both `bash` and `zsh`) and
 an idea from [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing).
 
-By leveraging an underlying shell to coordinate file
-redirects, we can drive any piece of code with inputs
-and check its output at the other end: is it what we
-were expecting? Put another way, Kevlar2 can test any
-code that the user's own shell supports.
+By coordinating file redirects, we can drive any piece
+of code with inputs and check its output at the other end:
+is it what we were expecting? Then, Kevlar2 can test any
+language or code that the user's shell can compile (if
+applicable) and execute!
 
 That is why we say we can "add any language" because
 which *xyz* developer doesn't have *xyz* installed on
@@ -115,15 +118,15 @@ As an example, here is how we would add TypeScript:
 50  
 ```
 
-First, we are tell Kevlar2 that our new language is
-called "TypeScript", and that its files end with ".ts".
-Next, we specify that TypeScript files require compilation
-by giving it a compile command: `tsc <FILENAME>.ts`.
-Note that this compile command creates a JavaScript file.
-Lastly, we tell Kevlar2 that our source file can be run
-using the `node <FILENAME>.js` command.
+First, we tell Kevlar2 that our new language is called
+`TypeScript`, and that its files end with `.ts`. Next,
+we specify that TypeScript files require compilation by
+giving it a compile command: `tsc <FILENAME>.ts`. Note
+that this compile command creates a JavaScript file.
+Lastly, we tell Kevlar2 that our source code can be run
+(or tested) using the `node <FILENAME>.js` command.
 
-Here, the "FILENAME" string literal is just a token that
+Here, the `FILENAME` string literal is just a token that
 will be dynamically replaced with the actual filename
 during runtime.
 
