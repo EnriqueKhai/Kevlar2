@@ -14,7 +14,7 @@ automate black-box and regression testing workflows.
     - [Errors](#errors)
       - [Time Limit Exceeded](#time-limit-exceeded)
       - [Output Limit Exceeded](#output-limit-exceeded)
-  - [Adding a new Language](#adding-a-new-language)
+  - [Adding a New Language](#adding-a-new-language)
     - [Step 1: Define it](#step-1-define-it)
     - [Step 2: Add a Template](#step-2-add-a-template)
   - [Comments](#comments)
@@ -73,15 +73,57 @@ git clone https://github.com/EnriqueKhai/Kevlar2.git
 
 ## Errors
 
-...
+Kevlar2 was designed with multiple safeguards to ensure
+that tests could finish gracefully when met with errors.
+These errors include runtime errors such as Time Limit
+Exceeded and Output Limit Exceeded.
 
 ### Time Limit Exceeded
 
-...
+This error indicates that a certain test took too long
+and was terminated prematurely. Time limits across all
+tests conducted by Kevlar2 are defined (and can be set)
+in `settings/config/limits.sh`.
+
+```
+17
+18    # Runtime limit for each test. Units = s, m or h.
+19    MAX_TEST_DURATION='5s'
+20
+```
+
+By default, the time limit is 5 seconds.
+
+Getting a Time Limit Exceeded error often means that the
+program entered an infinite loop somewhere. Of course,
+users can also set specific time limits to ensure that
+their code meets certain performance benchmarks.
+
+The latter is not recommended as execution performance
+varies widely from machine to machine, all else being
+constant. Mostly, this feature was implemented as a
+safeguard for testing, not to judge absolute performance.
 
 ### Output Limit Exceeded
 
-...
+This error indicates that a test produced more output
+than the maximum limit defined. Output limits across all
+tests conducted by Kevlar2 are defined (and can be set)
+in `settings/config/limits.sh`.
+
+```
+21
+22    # File size limit for output.txt. Units = B, kB or MB.
+23    MAX_OUTPUT_SIZE='10kB'
+24
+```
+
+By default, the output limit is 10kB.
+
+Getting an Output Limit Error often means that the program
+entered an infinite loop somewhere and keeps printing to
+standard output. Implemented as a safeguard for program-OS
+write safety, it is advisable to keep the output limit small.
 
 # Adding a New Language
 
