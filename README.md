@@ -11,7 +11,7 @@ automate black-box and regression testing workflows.
     - [Universal Testing with Black-box(ing)](#universal-testing-with-black-boxing)
   - [Installation](#installation)
   - [Getting Started](#getting-started)
-    - [Errors](#errors)
+    - [Runtime Errors](#runtime-errors)
       - [Time Limit Exceeded](#time-limit-exceeded)
       - [Output Limit Exceeded](#output-limit-exceeded)
   - [Adding a New Language](#adding-a-new-language)
@@ -71,7 +71,7 @@ git clone https://github.com/EnriqueKhai/Kevlar2.git
 
 ...
 
-## Errors
+## Runtime Errors
 
 Kevlar2 was designed with multiple safeguards to ensure
 that tests could finish gracefully when met with errors.
@@ -85,7 +85,7 @@ and was terminated prematurely. Time limits across all
 tests conducted by Kevlar2 are defined (and can be set)
 in `settings/config/limits.sh`.
 
-```
+```Bash
 17
 18    # Runtime limit for each test. Units = s, m or h.
 19    MAX_TEST_DURATION='5s'
@@ -111,7 +111,7 @@ than the maximum limit defined. Output limits across all
 tests conducted by Kevlar2 are defined (and can be set)
 in `settings/config/limits.sh`.
 
-```
+```Bash
 21
 22    # File size limit for output.txt. Units = B, kB or MB.
 23    MAX_OUTPUT_SIZE='10kB'
