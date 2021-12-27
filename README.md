@@ -3,7 +3,6 @@
 Kevlar2 is a language-agnostic framework built to 
 automate black-box and regression testing workflows.
 
-
 # Table of Contents
 
   - [Overview](#overview)
@@ -20,7 +19,6 @@ automate black-box and regression testing workflows.
     - [Step 2: Add a Template](#step-2-add-a-template)
   - [Comments](#comments)
 
-
 # Overview
 
 Before we begin, let's address the elephant in the room:
@@ -31,7 +29,6 @@ Also, Kevlar2 is the next iteration of the original [Kevlar](https://github.com/
 project, a system I had developed for the purpose of
 Competitive Programming.
 
-
 ## The Problem Today
 
 Programming languages come and go: what is fashionable
@@ -39,14 +36,12 @@ today might be extinct tomorrow. For that reason,
 developers often have to learn a number of languages
 over their careers (and one testing framework for each).
 
-
 ## One Tool to Rule Them All
 
 What if we had one framework that could test any code?
 A tool such that, no matter what new language we pick
 up tomorrow, we will not need to learn yet *another*
 testing framework from scratch?
-
 
 ## Universal Testing with Black-box(ing)
 
@@ -63,7 +58,6 @@ That is why we say we can "add any language" because
 which *xyz* developer doesn't have *xyz* installed on
 his or her machine?
 
-
 # Installation
 
 Free of any dependencies, Kevlar2 is lightweight and easy
@@ -73,11 +67,9 @@ to install.
 git clone https://github.com/EnriqueKhai/Kevlar2.git
 ```
 
-
 # Getting Started
 
 ...
-
 
 ## Runtime Errors
 
@@ -85,7 +77,6 @@ Kevlar2 was designed with multiple safeguards to ensure
 that tests could finish gracefully when met with errors.
 These errors include runtime errors such as Time Limit
 Exceeded and Output Limit Exceeded.
-
 
 ### Time Limit Exceeded
 
@@ -113,7 +104,6 @@ varies widely from machine to machine, all else being
 constant. Mostly, this feature was implemented as a
 safeguard for testing, not to judge absolute performance.
 
-
 ### Output Limit Exceeded
 
 This error indicates that a test produced more output
@@ -137,14 +127,12 @@ write safety, it is advisable to keep the output limit small.
 
 # Adding a New Language
 
-
 Out of the box, Kevlar2 supports C++, Java and Python3.
 
 That said, the magic of it is that *any* language can be
 added with just four lines of code.
 
 ## Step 1: Define it
-
 
 Simply define four pieces of information in `settings/libraries/languages.sh`:
 
@@ -183,7 +171,6 @@ Here, the `FILENAME` string literal is just a token that
 will be dynamically replaced with the actual filename
 during runtime.
 
-
 ## Step 2: Add a Template
 
 For completeness, we can choose to create a template test
@@ -191,7 +178,6 @@ harness for our new language.
 
 If present, this template test harness will be be copied
 over whenever we create a new project using this language.
-
 
 # Comments
 
