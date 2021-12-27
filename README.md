@@ -193,7 +193,7 @@ following `input.txt` file:
 3 5
 6 1
 3 6
-7 6  # Note: edge case.         <-- This is also a comment!
+7 6  # Note: edge case.         <-- This is also a (trailing) comment!
 3 7
 ```
 
