@@ -187,7 +187,7 @@ do
     {
         # run it.
         {
-            tm_cmd="$cmd < "$tfile" | head --bytes=$(( $OUTPUT_LIMIT + 1)) > "$rfile""
+            tm_cmd="$cmd < \"$tfile\" | head --bytes=$(( $OUTPUT_LIMIT + 1)) > \"$rfile\""
 
             eval "
                 timeout --foreground $RUNTIME_LIMIT $tm_cmd
