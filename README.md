@@ -69,7 +69,9 @@ git clone https://github.com/EnriqueKhai/Kevlar2.git
 
 # Getting Started
 
-...
+To learn about Kevlar2 and how to use it, check out the
+[Kevlar2 Tutorial](https://youtube.com/playlist?list=PLsEw_qS-mPbZHY9hmQ9TAAwu4sqoHgn-u)
+playlist on YouTube!
 
 ## Runtime Errors
 
