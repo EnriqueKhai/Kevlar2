@@ -80,6 +80,8 @@ that tests could finish gracefully when met with errors.
 These errors include runtime errors such as
 *Time Limit Exceeded* and *Output Limit Exceeded*.
 
+For a video walkthrough, click [here](https://youtu.be/VOFFMCoHcW4).
+
 ### Time Limit Exceeded
 
 This error indicates that a certain test took too long
@@ -134,6 +136,8 @@ Out of the box, Kevlar2 supports C++, Java and Python3.
 
 That said, the magic of it is that *any* language can be
 added with just four lines of code.
+
+For a video walkthrough, click [here](https://youtu.be/xk8EpCfwF1o).
 
 ## Step 1: Define it
 
@@ -208,6 +212,8 @@ because the `#` character is used in tests, run the
 ```
 build.sh --no-parse
 ```
+
+For a video walkthrough, click [here](https://youtu.be/W1Q1TcRZsYc).
 
 # License and Copyright
 
