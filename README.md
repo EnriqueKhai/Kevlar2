@@ -1,6 +1,8 @@
 # Kevlar2
 
-![david-troeger-M8xxVih_V_U-unsplash](https://user-images.githubusercontent.com/42400406/149685905-a343cf05-c31f-4e18-9290-a981af71e76c.jpg)
+![123](https://user-images.githubusercontent.com/42400406/149685979-8d3d9978-54bc-4f0e-a46b-d741422dab21.png)
+
+> Image by [David Troeger](https://unsplash.com/@jetlag)
 
 Kevlar2 is a language-agnostic, shell-based framework
 built to automate regression testing workflows.
